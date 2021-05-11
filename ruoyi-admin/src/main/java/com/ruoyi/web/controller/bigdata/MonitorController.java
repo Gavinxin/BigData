@@ -19,7 +19,7 @@ import java.util.Optional;
 @Component
 public class MonitorController {
     @GetMapping("/monitor")
-    public List<ClusterTraffic> main()
+    public String main()
     {
 
         return "main";
@@ -29,8 +29,9 @@ public class MonitorController {
     @ResponseBody
     public List<ClusterTraffic> limit()
     {
-        List<ClusterTraffic>  = listen()
+//        List<ClusterTraffic> clusterTraffics = this.listen(null);
 
+        return null;
     }
 
     @KafkaListener(topics = {"gpstracks"})
