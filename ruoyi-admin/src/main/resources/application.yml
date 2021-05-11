@@ -16,7 +16,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80
-  port: 80
+  port: 81
   servlet:
     # 应用的访问路径
     context-path: /
@@ -69,6 +69,17 @@ spring:
     restart:
       # 热部署开关
       enabled: true
+  kafka:
+    bootstrap-servers: 10.10.64.104:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: test
+      enable-auto-commit: true
+      auto-commit-interval: 1000
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 # MyBatis
 mybatis:
@@ -135,3 +146,7 @@ xss:
 swagger:
   # 是否开启swagger
   enabled: true
+
+
+
+
