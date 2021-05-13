@@ -1,7 +1,7 @@
 # 项目相关配置
 ruoyi:
   # 名称
-  name: RuoYi
+  name: BigData
   # 版本
   version: 4.6.1
   # 版权年份
@@ -138,7 +138,7 @@ xss:
   # 过滤开关
   enabled: true
   # 排除链接（多个用逗号分隔）
-  excludes: /system/notice/*
+  excludes: /system/notice/*,/test/one/*,/api/websocket/*
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 

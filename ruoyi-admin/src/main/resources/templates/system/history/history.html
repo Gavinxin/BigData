@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('历史数据')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>经度：</label>
+                                <input type="text" name="lat"/>
+                            </li>
+                            <li>
+                                <label>纬度：</label>
+                                <input type="text" name="lon"/>
+                            </li>
+                            <li>
+                                <label>拥挤指数：</label>
+                                <input type="text" name="cnt"/>
+                            </li>
+                            <li>
+                                <label>开始时间：</label>
+                                <input type="text" id="datetimepicker-demo-3" placeholder="请选择时间" name="startTime"/>
+                            </li>
+                            <li>
+                                <label>结束时间：</label>
+                                <input type="text" id="datetimepicker-demo-3-1" placeholder="请选择时间" name="endTime"/>
+                            </li>
+
+                            <li>
+                                <label>道路名称：</label>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" >
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:history:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:history:remove')}]];
+        var prefix = ctx + "system/history";
+        $(function(){
+
+        	$("#datetimepicker-demo-3").datetimepicker({
+       		    format: "yyyy-mm-dd hh:ii:ss",
+       		    autoclose: true
+       		});
+
+        	$("#datetimepicker-demo-3-1").datetimepicker({
+       		    format: "yyyy-mm-dd hh:ii:ss",
+       		    autoclose: true
+       		});
+       	});
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "选中的历史数据",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '序号',
+                    visible: true
+                },
+                {
+                    field: 'lat',
+                    title: '经度'
+                },
+                {
+                    field: 'lon',
+                    title: '纬度'
+                },
+                {
+                    field: 'cnt',
+                    title: '拥挤指数'
+                },
+                {
+                    field: 'time',
+                    title: '时间'
+                },
+                {
+                    field: 'name',
+                    title: '道路名称'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

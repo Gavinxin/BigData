@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ClusterHistoryMapper">
+    
+    <resultMap type="ClusterHistory" id="ClusterHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="lat"    column="lat"    />
+        <result property="lon"    column="lon"    />
+        <result property="cnt"    column="cnt"    />
+        <result property="time"    column="time"    />
+        <result property="name"    column="name"    />
+    </resultMap>
+
+    <sql id="selectClusterHistoryVo">
+        select id, lat, lon, cnt, time, name from cluster_history
+    </sql>
+
+    <select id="selectClusterHistoryList" parameterType="ClusterHistory" resultMap="ClusterHistoryResult">
+        <include refid="selectClusterHistoryVo"/>
+        <where>  
+            <if test="lat != null "> and lat = #{lat}</if>
+            <if test="lon != null "> and lon = #{lon}</if>
+            <if test="cnt != null "> and cnt = #{cnt}</if>
+            <if test="startTime != null "> and time &gt;= #{startTime}</if>
+            <if test="endTime != null "> and time &lt;= #{endTime}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectClusterHistoryById" parameterType="Long" resultMap="ClusterHistoryResult">
+        <include refid="selectClusterHistoryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertClusterHistory" parameterType="ClusterHistory">
+        insert into cluster_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="lat != null">lat,</if>
+            <if test="lon != null">lon,</if>
+            <if test="cnt != null">cnt,</if>
+            <if test="time != null">time,</if>
+            <if test="name != null">name</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="lat != null">#{lat},</if>
+            <if test="lon != null">#{lon},</if>
+            <if test="cnt != null">#{cnt},</if>
+            <if test="time != null">#{time},</if>
+            <if test="name != null">#{name}</if>
+         </trim>
+    </insert>
+
+    <update id="updateClusterHistory" parameterType="ClusterHistory">
+        update cluster_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="lon != null">lon = #{lon},</if>
+            <if test="cnt != null">cnt = #{cnt},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="name != null">name = #{name},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteClusterHistoryById" parameterType="Long">
+        delete from cluster_history where id = #{id}
+    </delete>
+
+    <delete id="deleteClusterHistoryByIds" parameterType="String">
+        delete from cluster_history where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,5 +1,8 @@
 package com.ruoyi.web.controller;
 
+import com.ruoyi.system.domain.ClusterHistory;
+import lombok.Getter;
+import lombok.Setter;
 import org.jcp.xml.dsig.internal.dom.DOMUtils;
 
 /**
@@ -7,41 +10,42 @@ import org.jcp.xml.dsig.internal.dom.DOMUtils;
  * Datetime : 2021/5/11 20:31
  */
 
-public class ClusterTraffic {
-    private double lat;
-    private double lon;
-    private Integer cnt;
+@Getter
+@Setter
+public class ClusterTraffic extends ClusterHistory implements Comparable<ClusterTraffic> {
+    private Double lat;
+    private Double lon;
+    private Long cnt;
+    private String roadName;
+    private String name;
 
-    public double getLat() {
-        return lat;
-    }
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public Integer getCnt() {
-        return cnt;
-    }
-
-    public void setCnt(Integer cnt) {
-        this.cnt = cnt;
-    }
-
-    public ClusterTraffic(double lat, double lon, Integer cnt) {
+    public ClusterTraffic(Double lat, Double lon, Long cnt, String roadName) {
         this.lat = lat;
         this.lon = lon;
         this.cnt = cnt;
+        this.roadName = roadName;
     }
 
     public ClusterTraffic() {
+    }
+
+    @Override
+    public String toString() {
+        return "ClusterTraffic{" +
+                "lat=" + lat +
+                ", lon=" + lon +
+                ", cnt=" + cnt +
+                ", roadName='" + roadName + '\'' +
+                '}';
+    }
+
+
+
+    @Override
+    public int compareTo(ClusterTraffic o) {
+        if(o.cnt>=this.cnt)
+            return 1;
+        return 0;
     }
 }

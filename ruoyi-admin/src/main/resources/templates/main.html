@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--360浏览器优先以webkit内核解析-->
-	<title>交通拥堵情况显示</title>
-	<style>
+    <title>交通拥堵情况显示</title>
+    <style>
     body,
     html,
     #container {
@@ -52,7 +52,7 @@
         width: 30%;
         position: fixed;
         right: 0;
-        top: 30%;
+        top: 5%;
         margin-left: 3rem;
         padding: 1rem 1rem;
         border-radius: .25rem;
@@ -69,8 +69,8 @@
     .input_1{
         z-index: 999;
         position: fixed;
-        left: 20px;
-        top: 40px;
+        left: 5px;
+        top: 10px;
         font-size: 22px;
 
     }
@@ -80,22 +80,31 @@
     .title {
         z-index: 999;
         position: fixed;
-        top: 0px;
-        left:600px;
+        top: 0;
+        left:450px;
         margin-left: 3rem;
         padding: 1rem 1rem;
         border-radius: .25rem;
         background-color: #fff;
         box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
     }
+
+
+
     </style>
-	<script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=LRMyU3H3VliBSm2D32YGBgzO1KBqvuas">
-	</script>
+    <script type="text/javascript"
+            src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=LRMyU3H3VliBSm2D32YGBgzO1KBqvuas">
+    </script>
     <link rel="shortcut icon" href="favicon.ico">
     <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
     <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
     <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
     <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 </head>
 
 <body class="gray-bg">
@@ -103,55 +112,117 @@
 
 <body>
 
-<div id="container" >
+<div id="container">
 </div>
 <h1 class="title">实时交通拥堵监测系统</h1>
 <ul class="btn-wrap" style="z-index: 99;">
-	<li class = "btn" onclick = "addRouteType()">叠加路况</li>
-	<li class = "btn" onclick = "removeRouteType()">删除路况</li>
+    <li class="btn" onclick="addRouteType()">叠加路况</li>
+    <li class="btn" onclick="removeRouteType()">删除路况</li>
 </ul>
-<table border="1" class="table_i">
-	<tr><td class="td">序号</td><td  style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(0,0, 0);">道路名称</td><td>拥堵指数</td></tr>
-	<tr>
-		<td class="td">1</td><td style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(180,0, 0)">京津高速</td><td>121</td>
-	</tr>
-	<tr>
-		<td class="td">2</td><td style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(180,0, 0)">东北路</td><td>119</td>
-	</tr>
-	<tr>
-		<td class="td">3</td><td style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(180,0, 0)">朝阳北路与三间房东路交叉口</td><td>108</td>
-	</tr>
-	<tr>
-		<td class="td">4</td><td style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(180,0, 0)">京漠线</td><td>121</td>
-	</tr>
-	<tr>
-		<td class="td">5</td><td style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(180,0, 0)">北木路/火寺路(路口)</td><td>105</td>
-	</tr>
-	<tr>
-		<td class="td">6</td><td style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(180,0, 0)">良三路</td><td>99</td>
-	</tr>
-	<tr>
-		<td class="td">7</td><td style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(180,0, 0)">熊南路路口</td><td>94</td>
-	</tr>
-	<tr>
-		<td class="td">8</td><td style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 13px;color: rgb(180,0, 0)">京岚线</td><td>85</td>
-	</tr>
-
-</table>
-<div class="input_1">
-	<form action="/bigdata/limit">
-	<input type="text" name="pStartX" placeholder="起始点横坐标"  />
-	<input type="text" name="pStartY" placeholder="起始点纵坐标"  />
-	<br>
-	<input type="text" name="pEndX" placeholder="终点横坐标" />
-	<input type="text" name="pEndY" placeholder="终点纵坐标" />
-		<input type="button" value="查询" onclick="Click()">
-	</form>
-
+<div id="app" class="table_i">
+    <el-table
+            :data="tableData"
+            border>
+        <el-table-column
+                type="index"
+                label="序号"
+                width="50">
+        </el-table-column>
+        <el-table-column
+                prop="roadName"
+                label="道路名称"
+                width="240">
+        </el-table-column>
+        <el-table-column
+                prop="cnt"
+                label="拥堵指数"
+                width="180">
+        </el-table-column>
+    </el-table>
+    <div class="input_1">
+        <el-form :inline="true" size="mini">
+            <el-form-item>
+                <el-input name="pStartX" placeholder="起始点横坐标" v-model="searchParams.pStartX"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input name="pStartY" placeholder="起始点纵坐标"  v-model="searchParams.pStartY"></el-input>
+            </el-form-item>
+            <br/>
+            <el-form-item>
+                <el-input name="pEndX" placeholder="终点横坐标"  v-model="searchParams.pEndX"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input name="pEndY" placeholder="终点纵坐标"  v-model="searchParams.pEndY"></el-input>
+            </el-form-item>
+            <br/>
+            <el-button type="button" @click="doSearch()">查询</el-button>
+        </el-form>
+    </div>
 </div>
 
+
 <script type="text/javascript">
-var map = new BMapGL.Map("container");
+
+
+</script>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script type="text/javascript">
+        var pStart = null;
+        var pEnd = null;
+        var polygon = null;
+    	var app = new Vue({
+        el:'#app',
+        data: {
+            tableData:[],
+            searchParams:{}
+        },
+        created(){
+
+        },
+        methods:{
+            doSearch(){
+                map.removeOverlay(polygon)
+                pStart = new BMapGL.Point(this.searchParams.pStartX,this.searchParams.pStartY);
+                pEnd = new BMapGL.Point(this.searchParams.pEndX,this.searchParams.pEndY);
+                polygon = new BMapGL.Polygon([
+                        new BMapGL.Point(pStart.lng,pStart.lat),
+                        new BMapGL.Point(pEnd.lng,pStart.lat),
+                        new BMapGL.Point(pEnd.lng,pEnd.lat),
+                        new BMapGL.Point(pStart.lng,pEnd.lat)
+                        ], {strokeColor:"red", strokeWeight:6, strokeOpacity:0.5});
+                map.addOverlay(polygon);
+                this.limit();
+            },
+            limit(){
+                let _this = this
+                $.ajax({
+                        type: "get",
+                        url: "/bigdata/limit",
+                        contentType: 'application/json;charset=utf-8', //设置请求头信息
+                        data: {
+                            pStartX:_this.searchParams.pStartX,
+                            pStartY:_this.searchParams.pStartY,
+                            pEndX:_this.searchParams.pEndX,
+                            pEndY:_this.searchParams.pEndY
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result.code == 0) {
+                                console.log("结果--",result.msg)
+                            } else {
+                                $.modal.alertError(result.msg);
+                            }
+                        },
+                        error: function(error) {
+                            $.modal.alertWarning("请求失败。");
+                        }
+                    });
+            }
+        }
+    });
+    var map = new BMapGL.Map("container");
 // 创建地图实例
 var point = new BMapGL.Point(116.404, 39.915);
 // 创建点坐标
@@ -170,36 +241,12 @@ var scaleCtrl = new BMapGL.ScaleControl();  // 添加比例尺控件
 map.addControl(scaleCtrl);
 var zoomCtrl = new BMapGL.ZoomControl();  // 添加缩放控件
 map.addControl(zoomCtrl);
-var cityCtrl = new BMapGL.CityListControl();  // 添加城市列表控件
-map.addControl(cityCtrl);
+<!--var cityCtrl = new BMapGL.CityListControl();  // 添加城市列表控件-->
+<!--map.addControl(cityCtrl);-->
 map.setMapStyleV2({
   styleId: '80917e680573103387c0e5bfa5a724e2'
 });
-var marker1 = new BMapGL.Marker(new BMapGL.Point(116.642205,39.796877));
-var marker2 = new BMapGL.Marker(new BMapGL.Point(116.416857,40.135382));
-var marker3 = new BMapGL.Marker(new BMapGL.Point(116.589515,39.930447));
-var marker4 = new BMapGL.Marker(new BMapGL.Point(116.730495,40.789573));
-var marker5 = new BMapGL.Marker(new BMapGL.Point(116.563985,40.246531));
-var marker6 = new BMapGL.Marker(new BMapGL.Point(116.046498,39.818616));
-var marker7 = new BMapGL.Marker(new BMapGL.Point(117.221842,40.151276));
-var marker8 = new BMapGL.Marker(new BMapGL.Point(116.449808,39.777535));
-// 在地图上添加点标记
-map.addOverlay(marker1);
-map.addOverlay(marker2);
-map.addOverlay(marker3);
-map.addOverlay(marker4);
-map.addOverlay(marker5);
-map.addOverlay(marker6);
-map.addOverlay(marker7);
-map.addOverlay(marker8);
 
-
-
-</script>
-    <script th:src="@{/js/jquery.min.js}"></script>
-    <script th:src="@{/js/bootstrap.min.js}"></script>
-    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-    <script type="text/javascript">
 	    $('#pay-qrcode').click(function(){
 	        var html=$(this).html();
 	        parent.layer.open({
@@ -211,9 +258,71 @@ map.addOverlay(marker8);
 	            content: html
 	        });
 	    });
-	    function Click(){
-	    	console.log("点击了文字");
-	    }
-    </script>
+	    
+	    var websocket = null;
+
+    //判断当前浏览器是否支持WebSocket, 主要此处要更换为自己的地址
+    if ('WebSocket' in window) {
+        websocket = new WebSocket("ws://localhost:81/api/websocket/100");
+    } else {
+        alert('Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function() {
+        setMessageInnerHTML("error");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function(event) {
+        //setMessageInnerHTML("open");
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function(event) {
+        setMessageInnerHTML(event.data);
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function() {
+        setMessageInnerHTML("close");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function() {
+        websocket.close();
+    }
+
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+        console.log("websocket消息",innerHTML)
+        //
+        if(innerHTML!='conn_success'&&innerHTML!='close'){
+         app.tableData = JSON.parse(innerHTML);
+          console.log("appmessage",app.tableData)
+          for(var i =0;i<app.tableData.length;i++){
+            var marker = new BMapGL.Marker(new BMapGL.Point(app.tableData[i].lat,app.tableData[i].lon));
+            map.addOverlay(marker);
+          }
+
+
+        }
+
+    }
+
+    //关闭连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+
+    //发送消息
+    function send() {
+        var message = document.getElementById('text').value;
+        websocket.send(message);
+    }
+
+
+
+</script>
 </body>
 </html>
